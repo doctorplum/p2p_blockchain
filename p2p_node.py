@@ -348,7 +348,7 @@ class P2PNetwork:
 
         time.sleep(5)
 
-        turn_on_light("green")
+        turn_on_light("yellow")
         total = 0
         for neighbor in self.node.neighbors:
             print(f"Adding {neighbor.rand_num}")
@@ -362,6 +362,7 @@ class P2PNetwork:
         time.sleep(3)
 
         if selected_node == self.node:
+            turn_on_light("green")
             print("This node is selected to generate a hash of an AWS SQL database.")
 
             # connect to server and create a command line instance

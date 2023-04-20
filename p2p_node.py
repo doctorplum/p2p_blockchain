@@ -26,7 +26,7 @@ import plyvel
 ## RGB LED SETUP FOR RASPBERRY PI ONLY ##################################################################################
 try: 
     import RPi.GPIO as GPIO
-    from led_test import *
+    from rgb_controller import *
 except:
     pass
 
@@ -441,73 +441,7 @@ network = P2PNetwork(node, DB)
 print(f"Node started on {LOCAL_IP}:{port}")
 threading.Thread(target=network.listen).start()
 
-schedule.every(60).seconds.do(network.miner_selection_wrapper)  # Schedule miner_selection every x minutes
+schedule.every(120).seconds.do(network.miner_selection_wrapper)  # Schedule miner_selection every x minutes
 while True:
     schedule.run_pending()
 #########################################################################################################################
-
-# %%
-
-
-# %%
-network.node
-
-# %%
-selected_node
-
-# %%
-for key, value in PLYVEL_DB.iterator():
-    print(key, value)
-
-# %%
-def display_block(block_dict):
-    print(f"Index: {block_dict['index']}")
-    print(f"Timestamp: {block_dict['timestamp']}")
-    print(f"Sender: {block_dict['sender']}")
-    print(f"Who: {block_dict['who']}")
-    print(f"Previous hash: {block_dict['previous_hash']}")
-    print(f"DB Hash: {block_dict['db_hash']}")
-
-# %%
-BLOCKCHAIN_INDEX = 0
-PREVIOUS_HASH = None
-for key, value in PLYVEL_DB:
-    BLOCKCHAIN_INDEX += 1
-    block_dict = json.loads(value.decode('utf-8'))
-    PREVIOUS_HASH = block_dict["previous_hash"]
-print("INDEX IS CURRENTLY", BLOCKCHAIN_INDEX)
-PREVIOUS_HASH
-
-# %%
-for key, value in PLYVEL_DB.iterator():
-    key_str = key.decode('utf-8')
-    if key_str.startswith('block:'):
-        block_dict = json.loads(value.decode('utf-8'))
-        display_block(block_dict)
-        print()
-
-# %%
-block_dict
-
-# %%
-def deserialize_block(block_data):
-    block_dict = json.loads(block_data.decode('utf-8'))
-    return Block(
-        block_dict['index'],
-        block_dict['previous_hash'],
-        block_dict['timestamp'],
-        block_dict['data'],
-        block_dict['hash']
-    )
-
-# %%
-def get_latest_block(db):
-    latest_block_index = db.get(b'latest_block_index')
-    if latest_block_index is None:
-        return None
-
-    latest_block_index = struct.unpack('>I', latest_block_index)[0]
-    latest_block_data = db.get(struct.pack('>I', latest_block_index))
-    return deserialize_block(latest_block_data)
-
-

@@ -955,7 +955,7 @@ network = P2PNetwork(node, DB)
 print(f"Node started on {LOCAL_IP}:{port}")
 threading.Thread(target=network.listen).start()
 
-schedule.every(60).seconds.do(network.miner_selection_wrapper)  # Schedule miner_selection every x minutes
+schedule.every(120).seconds.do(network.miner_selection_wrapper)  # Schedule miner_selection every x minutes
 while True:
     schedule.run_pending()
 #########################################################################################################################

@@ -92,10 +92,9 @@ def get_wifi_ip_address():
 
 LOCAL_IP = get_wifi_ip_address()
 print(LOCAL_IP)
-LOCAL_IP_RANGE = [LOCAL_IP, 
-                  "10.121.37.20", 
-                  "10.121.39.76", 
-                  "10.121.33.23"]
+LOCAL_IP_RANGE = ["10.121.", 
+                  "10.121.", 
+                  "10.121."]
 LOCAL_ROUTING_PREFIX = "/22"
 PORT_RANGE = (5000, 5002)
 
@@ -338,7 +337,7 @@ class P2PNetwork:
         self.node.neighbors.sort(key=lambda node: node.ip + str(node.port))
         self.broadcast(json.dumps({"type": "sync", "who": self.who, "device": self.device}))
         if FIRST == True:
-            time.sleep(7)
+            time.sleep(5)
         else:
             time.sleep(3)
 
@@ -369,11 +368,7 @@ class P2PNetwork:
             
         print(f"Total: {total} Selected index: {selected_index} Selected node: {selected_node}")
 
-        time.sleep(2)
-
         if selected_node == self.node:
-            turn_on_light("turn_off")
-            time.sleep(1)
             turn_on_light("purple")
             turn_on_light("purple")
             turn_on_light("purple")
@@ -411,8 +406,10 @@ class P2PNetwork:
             PLYVEL_DB.put(struct.pack('>I', new_block.index), json.dumps(new_block.to_dict(), default=str).encode('utf-8'))
             BLOCKCHAIN_INDEX += 1
             PREVIOUS_HASH = new_block.block_hash
+            time.sleep(3)
         else:
             print(f"Node {selected_index} is selected to generate a hash of an AWS SQL database.")
+            time.sleep(3)
         self.who = None
         self.device = None
         FIRST = True

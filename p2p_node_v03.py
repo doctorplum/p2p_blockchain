@@ -304,6 +304,7 @@ class P2PNetwork:
 
                 BLOCKCHAIN_INDEX += 1
                 PREVIOUS_HASH = new_block["block_hash"]
+                self.neighbors = [self.node]
                 self.who = None
                 self.device = None
 
@@ -337,7 +338,7 @@ class P2PNetwork:
         self.node.neighbors.sort(key=lambda node: node.ip + str(node.port))
         self.broadcast(json.dumps({"type": "sync", "who": self.who, "device": self.device}))
         if FIRST == True:
-            time.sleep(5)
+            time.sleep(6)
         else:
             time.sleep(3)
 
@@ -410,6 +411,7 @@ class P2PNetwork:
         else:
             print(f"Node {selected_index} is selected to generate a hash of an AWS SQL database.")
             time.sleep(3)
+        self.neighbors = [self.node]
         self.who = None
         self.device = None
         FIRST = True
